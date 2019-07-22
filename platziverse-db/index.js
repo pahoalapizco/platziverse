@@ -4,8 +4,8 @@ const setupDataBase = require('./lib/db')
 const setupAgentModel = require('./models/agent')
 const setupAgentService = require('./lib/agent')
 const setupMetricModel = require('./models/metric')
-const defaults = require('defaults'
-)
+const defaults = require('defaults')
+
 module.exports = async function (config) {
   config = defaults(config, {
     dialect: 'sqlite',
@@ -19,11 +19,11 @@ module.exports = async function (config) {
     }
   })
   const sequelize = setupDataBase(config)
-  const agentModel = setupAgentModel(config)
-  const metricModel = setupMetricModel(config)
+  const AgentModel = setupAgentModel(config)
+  const MetricModel = setupMetricModel(config)
 
-  agentModel.hasMany(metricModel)
-  metricModel.belongsTo(agentModel)
+  AgentModel.hasMany(MetricModel)
+  MetricModel.belongsTo(AgentModel)
 
   await sequelize.authenticate()
 
@@ -31,7 +31,7 @@ module.exports = async function (config) {
     await sequelize.sync({ force: true })
   }
 
-  const Agent = setupAgentService(agentModel)
+  const Agent = setupAgentService(AgentModel)
   const Metric = {}
 
   return {
