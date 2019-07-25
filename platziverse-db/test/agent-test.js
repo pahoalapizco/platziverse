@@ -11,7 +11,7 @@ const MetricStub = {
 }
 
 const config = {
-  loggin: function () {}
+  logging () {}
 }
 
 let db = null
@@ -19,12 +19,26 @@ let AgentStub = null
 let sandbox = null
 const single = Object.assign({}, agentFixture.single)
 const id = 1
+const uuid = 'yyy-yyy-yyy-yyy'
+const uuidArgs = {
+  where: { uuid }
+}
 
 test.beforeEach(async () => {
   sandbox = sinon.createSandbox()
   AgentStub = {
     hasMany: sandbox.spy()
-  } 
+  }
+
+  // Model findOne Stub
+  AgentStub.findOne = sandbox.stub()
+  AgentStub.findOne.withArgs(uuidArgs).returns(Promise.resolve(agentFixture.byUUid(uuid)))
+  
+  // Model update Stub
+  AgentStub.update = sandbox.stub()
+  AgentStub.update.withArgs(single, uuidArgs).returns(Promise.resolve(single))
+
+  // findById:
   AgentStub.findById = sandbox.stub()
   AgentStub.findById.withArgs(id).returns(Promise.resolve(agentFixture.byId(id)))
 
@@ -58,3 +72,12 @@ test.serial('Agent#findById', async t => {
   t.true(AgentStub.findById.calledWith(id), 'findById should be called with an specific id')
   t.deepEqual(agent, agentFixture.byId(id), 'Shoul be the same')
 })
+
+test.serial('Agent#CreateOrUpdate - exists', async t => {
+  let agent =  await db.Agent.createOrUpdate(single)
+  t.true(AgentStub.findOne.called, 'findOne Should be called')
+  t.true(AgentStub.findOne.calledTwice, 'findOne Should be called twice')
+  t.true(AgentStub.update.calledOnce, 'update Should be called once')
+  t.deepEqual(agent, single, 'Should be the same')
+})
+
