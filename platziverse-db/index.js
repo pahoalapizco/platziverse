@@ -4,11 +4,12 @@ const setupDataBase = require('./lib/db')
 const setupAgentModel = require('./models/agent')
 const setupAgentService = require('./lib/agent')
 const setupMetricModel = require('./models/metric')
+const setupMetricService = require('./lib/metric')
 const defaults = require('defaults')
 
 module.exports = async function (config) {
   config = defaults(config, {
-    dialect: 'sqlite',
+    dialect: 'sqlite', // for unit test
     pool: {
       max: 10,
       min: 0,
@@ -32,7 +33,7 @@ module.exports = async function (config) {
   }
 
   const Agent = setupAgentService(AgentModel)
-  const Metric = {}
+  const Metric = setupMetricService(MetricModel, AgentModel)
 
   return {
     Agent,
