@@ -25,17 +25,17 @@ module.exports = function setupMetricService (MetricModel, AgentModel) {
       raw: true
     })
   }
-
+   
   const findByTypeAgentUuid = async (type, uuid) => {
     return MetricModel.findAll({
-      attributes: [ 'id', 'type', 'value', 'createdAt' ],
+      attributes: ['id', 'type', 'value', 'createdAt'],
       where: { type },
       limit: 20,
-      order: [[ 'createdAt', 'DESC']],
+      order: [['createdAt', 'DESC']],
       include: [{
         attributes: [],
         model: AgentModel,
-        where: { uuid } 
+        where: { uuid }
       }],
       row: true
     })
