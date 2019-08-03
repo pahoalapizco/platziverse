@@ -139,5 +139,5 @@ test.serial('Metric#create', async t => {
   t.true(MetricStub.create.called, 'create shoul be called')
   t.true(MetricStub.create.calledOnce, 'create shoul be called once')
   t.true(MetricStub.create.calledWith(newMetric), 'create shoul be called once')
-  // t.deepEqual(metric, newMetric, 'Should be the same')
+  t.deepEqual(metric, newMetric, 'Should be the same')
 })
