@@ -4,21 +4,26 @@ const debug = require('debug')('platziverse:db:setup') // namespace que indica d
 const inquirer = require('inquirer')
 const chalk = require('chalk')
 const db = require('./')
+const argv = require('yargs').boolean('y').argv
 
 const prompt = inquirer.createPromptModule() // interactuar mediante cli
 
 async function setup () {
-  const answer = await prompt([
-    {
-      type: 'confirm',
-      name: 'setup',
-      message: 'This will destroy your database, are you sure? '
-    }
-  ])
+  const opc = argv.y
 
-  if (!answer.setup) {
-    return console.log('Nothing happend')
+  if ( !opc ){
+    const answer = await prompt([
+      {
+        type: 'confirm',
+        name: 'setup',
+        message: 'This will destroy your database, are you sure? '
+      }
+    ])
+    if (!answer.setup || opc) {
+      return console.log('Nothing happend')
+    }
   }
+
 
   const config = {
     database: process.env.DB_NAME || 'platziverse',
