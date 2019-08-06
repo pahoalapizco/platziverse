@@ -25,7 +25,7 @@ module.exports = function setupMetricService (MetricModel, AgentModel) {
       raw: true
     })
   }
-   
+
   const findByTypeAgentUuid = async (type, uuid) => {
     return MetricModel.findAll({
       attributes: ['id', 'type', 'value', 'createdAt'],

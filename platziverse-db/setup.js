@@ -2,7 +2,6 @@
 
 const debug = require('debug')('platziverse:db:setup') // namespace que indica donde se hará el debug
 const inquirer = require('inquirer')
-const chalk = require('chalk')
 const db = require('./')
 const argv = require('yargs').boolean('y').argv
 const { config, handleFatalError } = require('platziverse-utils')
@@ -12,7 +11,7 @@ const prompt = inquirer.createPromptModule() // interactuar mediante cli
 async function setup () {
   const opc = argv.y
 
-  if ( !opc ){
+  if (!opc) {
     const answer = await prompt([
       {
         type: 'confirm',

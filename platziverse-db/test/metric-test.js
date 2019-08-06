@@ -19,29 +19,17 @@ const newMetric = {
   updateAt: new Date()
 }
 
-const agent = {
-  id: 1,
-  uuid: 'yyy-yyy-yyy-yyy',
-  name: 'test',
-  username: 'test-user',
-  hostname: 'test-host',
-  pid: 0,
-  connected: true,
-  createAt: new Date(),
-  updateAt: new Date()
-}
-
 let db = null
 let MetricStub = null
 let AgentStub = null
 let sandbox = null
-let uuid = 'yyy-yyy-yyy-yyw' //agentId = 2
-let type = 'CPU'
+const uuid = 'yyy-yyy-yyy-yyw' // agentId = 2
+const type = 'CPU'
 
-let uuidArgs = {
+const uuidArgs = {
   where: { uuid }
 }
-let typeArgs = {
+const typeArgs = {
   attributes: ['id', 'type', 'value', 'createdAt'],
   where: { type },
   limit: 20,
@@ -54,7 +42,7 @@ let typeArgs = {
   row: true
 }
 
-let uuidTypeArgs = {
+const uuidTypeArgs = {
   attributes: ['type'], // Columnas que retorna
   group: ['type'],
   include: [{
@@ -116,7 +104,7 @@ test('Metric#Setup', async t => {
 })
 
 test.serial('Metric#findByAgentUuid', async t => {
-  let metric = await db.Metric.findByAgentUuid(uuid)
+  const metric = await db.Metric.findByAgentUuid(uuid)
   t.true(MetricStub.findAll.called, 'findAll shuld be called!')
   t.true(MetricStub.findAll.calledOnce, 'findAll shuld be called once!')
   t.true(MetricStub.findAll.calledWith(uuidTypeArgs), 'findAll shuld be called with an specific args!')
@@ -124,7 +112,7 @@ test.serial('Metric#findByAgentUuid', async t => {
 })
 
 test.serial('Metric#findByTypeAgentUuid', async t => {
-  let metric = await db.Metric.findByTypeAgentUuid(type, uuid)
+  const metric = await db.Metric.findByTypeAgentUuid(type, uuid)
   t.true(MetricStub.findAll.called, 'findAll should be called')
   t.true(MetricStub.findAll.calledOnce, 'findAll should be called once')
   t.true(MetricStub.findAll.calledWith(typeArgs), 'findAll shoul be called with an specific args')
@@ -132,7 +120,7 @@ test.serial('Metric#findByTypeAgentUuid', async t => {
 })
 
 test.serial('Metric#create', async t => {
-  let metric = await db.Metric.create(uuid, newMetric)
+  const metric = await db.Metric.create(uuid, newMetric)
   t.true(AgentStub.findOne.called, 'Agent->findOne should be called')
   t.true(AgentStub.findOne.calledOnce, 'Agent->findOne should be called once')
   t.true(AgentStub.findOne.calledWith(uuidArgs), 'Agent->findOne should be called once')

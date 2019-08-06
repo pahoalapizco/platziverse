@@ -150,7 +150,7 @@ test.serial('Agent#findUser', async t => {
   t.deepEqual(agents, agentFixture.test, 'Shoul be the same amount')
 })
 // ======= createOrUpdate - new =======
-test.serial('Agent#creatOrupdate - new', async t => {
+test.serial('Agent#creatOrupdate - new', async t => {
   const agent = await db.Agent.createOrUpdate(newAgent)
   t.true(AgentStub.findOne.called, 'findOne should be called')
   t.true(AgentStub.findOne.calledOnce, 'findOne shoul be called onece')

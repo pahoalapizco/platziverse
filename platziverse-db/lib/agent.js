@@ -25,7 +25,7 @@ module.exports = function setupAgentService (AgentModel) {
     return AgentModel.findById(id)
   }
 
-  const findByUuId = (uuid) => {
+  const findByUuId = (uuid) => {
     return AgentModel.findOne({
       where: {
         uuid
