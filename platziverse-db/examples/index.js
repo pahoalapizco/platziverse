@@ -3,16 +3,10 @@
 // Ejemplo de uso del módulo BD
 
 const db = require('../')
+const { config, handleFatalError } = require('platziverse-utils')
 
 async function run(){
-  const config = {
-    database: process.env.DB_NAME || 'platziverse',
-    username: process.env.DB_USER || 'platzi',
-    password: process.env.DB_PASS || 'platzi',
-    host: process.env.DB_HOST || 'localhost',
-    dialect: 'postgres'
-  }
-  const { Agent, Metric } = await db(config).catch(handleFatalError)
+  const { Agent, Metric } = await db(config()).catch(handleFatalError)
   const agent = await Agent.createOrUpdate({
     uuid: 'xxxx',
     name: 'test',
@@ -47,12 +41,5 @@ async function run(){
   console.log(metricsByTyoe)
 
 }
-
-function handleFatalError(err) {
-  console.error(err.message)
-  console.error(err.stack)
-  process.exit(1)
-}
-
 
 run()
