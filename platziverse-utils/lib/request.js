@@ -7,6 +7,11 @@ const handleFatalError = (err) => {
   process.exit(1)
 }
 
+const handleError = (err) => {
+  console.error(`${chalk.red('[Error]: ')} ${err.message}`)
+  console.error(`${err.stack}`)
+}
 module.exports = {
-  handleFatalError
+  handleFatalError,
+  handleError
 }
