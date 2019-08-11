@@ -34,8 +34,32 @@ server.on('clientConnected', (client) => {
   clients.set(client.id, null)
 })
 
-server.on('clientDisconnected', (client) => {
+server.on('clientDisconnected', async (client) => {
   debug(`Client Disconected: ${client.id}`)
+  const agent = clients.get(client.id)
+
+  if (agent) {
+    // Mark Agent as disconnected
+    agent.connected = false
+
+    try {
+      await Agent.createOrUpdate(agent)
+    } catch (e) {
+      return handleError(e)
+    }
+    // Delete agent from clientes
+    clients.delete(client.id)
+
+    server.publish({
+      topic: 'agent/disconnected',
+      payload: JSON.stringify({
+        agent: {
+          uuid: agent.uu
+        }
+      })
+    })
+    debug(`Cliente (${client.id}) associeted to Agent (${agent.uuid}) marked as disconnected.`)
+  }
 })
 
 server.on('published', async (packet, client) => {
@@ -48,7 +72,7 @@ server.on('published', async (packet, client) => {
       break
     case 'agent/message':
       debug(`payload: ${packet.payload}`)
-      await agentMessage(packet.payload, client)
+      await saveAgent(packet.payload, client)
       break
   }
 })
@@ -65,31 +89,42 @@ server.on('error', handleFatalError)
 process.on('uncaughtException', handleFatalError)
 process.on('unhandledRejection', handleFatalError)
 
-const agentMessage = async (payload, client) => {
+const saveAgent = async (payload, client) => {
   payload = parsePayload(payload)
-  console.log(`payload.agent: ${payload.agent}`)
+  let agent
   if (payload) {
     payload.agent.connected = true
-  }
 
-  const agent = await saveAgentConnected(payload)
+    try {
+      agent = await Agent.createOrUpdate(payload.agent)
+    } catch (e) {
+      return handleError(e)
+    }
 
-  // Notify Agent is connected
-  if (!clients.get(client.id)) {
-    clients.set(client.id, agent)
-    notifyAgent(agent)
+    debug(`Agent ${agent.uuid} saved`)
+
+    // Notify Agent is connected
+    if (!clients.get(client.id)) {
+      clients.set(client.id, agent)
+      notifyAgent(agent)
+    }
+
+    await saveMetrics(agent, payload)
   }
 }
 
-const saveAgentConnected = async (payload) => {
-  let agent
-  try {
-    agent = await Agent.createOrUpdate(payload.agent)
-  } catch (e) {
-    return handleError
+// Store Metrics
+const saveMetrics = async (agent, payload) => {
+  for (const metric of payload.metrics) {
+    let m
+    debug(`metrics: ${payload.metrics}`)
+    try {
+      m = await Metric.create(agent.uuid, metric)
+    } catch (e) {
+      return handleError(e)
+    }
+    debug(`Metric ${m.id} saved on Agent ${agent.uuid}`)
   }
-  debug(`Agent ${agent.uui} saved`)
-  return agent
 }
 
 const notifyAgent = (agent) => {
