@@ -1,0 +1,22 @@
+{
+  "name": "platziverse-agent",
+  "version": "1.0.0",
+  "description": "A simple IoT platform - Agent",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pahoalapizco/platziverse.git"
+  },
+  "author": "pahoalapizco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pahoalapizco/platziverse/issues"
+  },
+  "homepage": "https://github.com/pahoalapizco/platziverse#readme",
+  "devDependencies": {
+    "standard": "^13.1.0"
+  }
+}

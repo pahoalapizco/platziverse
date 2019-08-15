@@ -1,0 +1,21 @@
+node_modules/
+
+dump.rdb
+
+# Test Files
+.nyc_output/
+coverage/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# auto
+package-lock.json
