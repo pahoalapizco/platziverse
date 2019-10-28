@@ -19,3 +19,5 @@ Thumbs.db
 
 # auto
 package-lock.json
+
+../platziverse.code-workspace
