@@ -10,7 +10,7 @@ const uuid = require('uuid')
 const EventEmitter = require('events')
 
 const defOptions = {
-  name: 'untitled',
+  name: 'platzi-test',
   username: 'platzi',
   interval: 5000,
   mqtt: {
@@ -30,7 +30,7 @@ class PlatziverseAgent extends EventEmitter {
     this._metrics = new Map()
   }
 
-  addMetric () {
+  addMetric (type, fn) {
     this._metrics.set(type, fn)
   }
 
@@ -66,22 +66,24 @@ class PlatziverseAgent extends EventEmitter {
               metrics: [],
               timestamp: new Date().getTime()
             }
-          }
-          
-          for ( let [ metric, fn ] of this._metrics) {
-            if (fn.length == 1) { // cuando la longitud de la funcion es 1 entonces es un callbak
-              fn = util.promisify(fn) // convierte un callback a una promesa
-            }
-            metric.message.push({
-              type: metric,
-              value: await Promise.resolve(fn())
-            })
-          }
 
+            for ( let [ metric, fn ] of this._metrics) {
+              if (fn.length == 1) { // cuando la longitud de la funcion es 1 entonces es un callbak
+                fn = util.promisify(fn) // convierte un callback a una promesa
+              }
+              message.metrics.push({
+                type: metric,
+                value: await Promise.resolve(fn())
+              })
+            }
+            debug('Sending', message)
+            this._client.publish('agent/message', JSON.stringify(message))
+            this.emit('message', message)
+          }
         }, opts.interval)
       })
-
-      this._client.on('message', (topic, payload) => {
+        
+        this._client.on('message', (topic, payload) => {
         paylod = parsePayload(payload)
         
         // Re transmitir mensajes en nuestro agente!!

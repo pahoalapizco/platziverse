@@ -1,14 +1,9 @@
-# Platziverse Agent
-
-## Usage
-
-```js
-const PlatziverseAgent = require('platziverse-agent')
+const PlatziverseAgent = require('../')
 
 const agent = new PlatziverseAgent ({
   name: 'myapp',
-  username: 'admin'
-  inserval: 2000
+  username: 'admin',
+  interval: 2000
 })
 
 // rss: Resident Set Size (porcion de memoria que ocupa un proceso en RAM)
@@ -23,7 +18,7 @@ agent.addMetric('PromiseMetric', function getRandomPromise () {
 })
 
 // Agregar metricas que soporten callbacks
-agent.addMetric('CallbackMetric', function getRandomCalback (calback) {
+agent.addMetric('CallbackMetric', function getRandomCalback (callback) {
   setTimeout(() => {
     callback(null, Math.random())
   }, 1000)
@@ -47,5 +42,4 @@ function handler (payload) {
   console.log(payload)
 }
 
-setTimeout(() => agent.disconnect(), 20000)
-```
+setTimeout(() => agent.disconnect(), 5000)

@@ -5,6 +5,7 @@
   "description": "A simple IoT platform - Agent",
   "main": "index.js",
   "scripts": {
+    "start-examples": "node examples/index.js",
     "lint": "standard"
   },
   "repository": {
