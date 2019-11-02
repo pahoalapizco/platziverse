@@ -22,7 +22,7 @@ async function run () {
   const agents = await Agent.findAll().catch(handleFatalError)
 
   console.log('-- Agents --')
-  console.log(agents.dataValues)
+  console.log(agents)
 
   const metric = await Metric.create(agent.uuid, {
     type: 'CPU',

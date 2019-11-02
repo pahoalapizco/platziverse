@@ -25,7 +25,7 @@ async function setup () {
   }
 
   const loggin = s => debug(s)
-  await db(config({ loggin })).catch(handleFatalError)
+  await db(config({ loggin, setup: true })).catch(handleFatalError)
 
   console.log('S U C C E S S !!')
   process.exit(0)
