@@ -26,9 +26,16 @@ app.use((err, req, res, next) => {
   })
 })
 
-process.on('uncaughtException', handleFatalError)
-process.on('unhandledRejection', handleFatalError)
+// Si el modulo no es un modulo padre (que no fue requerido en otro archivo o instancia)
+// entonces ejecuta el proceso y corre el server en un detemrinado puerto
+if (!module.parent) {
+  process.on('uncaughtException', handleFatalError)
+  process.on('unhandledRejection', handleFatalError)
+  
+  server.listen(port, () => {
+    console.log(`${chalk.green('[platziverse-api]')} server listening on port ${port}`)
+  })
+}
 
-server.listen(port, () => {
-  console.log(`${chalk.green('[platziverse-api]')} server listening on port ${port}`)
-})
+// se exporta el server para realizar tests!
+module.exports = server
