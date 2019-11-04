@@ -2,6 +2,7 @@
 
 const debug = require('debug')('platziverse:api:routes')
 const express = require('express')
+const { AgentNotFoundError } = require('platziverse-utils')
 
 const api = express.Router()
 
@@ -13,7 +14,7 @@ api.get('/agents/:uuid', (req, res, next) => {
   const { uuid } = req.params
 
   if (uuid != 'yyy') {
-    return next(new Error('Agent not found'))
+    return next(new AgentNotFoundError(uuid))
   }
 
   res.send({ uuid })

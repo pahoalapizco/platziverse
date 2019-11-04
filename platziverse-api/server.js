@@ -14,7 +14,7 @@ const server = http.createServer(app)
 
 app.use('/api', api)
 
-// midlewere manejador de errores
+// middlewere manejador de errores
 app.use((err, req, res, next) => {
   if (err.message.match(/not found/)) {
     return res.status(404).send({
