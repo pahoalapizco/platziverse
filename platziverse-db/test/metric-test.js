@@ -3,8 +3,7 @@
 const test = require('ava')
 const sinon = require('sinon')
 const proxyquire = require('proxyquire')
-const agentFixture = require('./fixtures/agent')
-const metricFixture = require('./fixtures/metric')
+const { agentFixture, metricFixture } = require('platziverse-utils')
 
 const config = {
   logging () {}

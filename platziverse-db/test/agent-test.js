@@ -3,7 +3,7 @@
 const test = require('ava')
 const proxyquire = require('proxyquire') // sobre escribe los require's que la función esta haciendo.
 const sinon = require('sinon')
-const agentFixture = require('./fixtures/agent')
+const { agentFixture } = require('platziverse-utils')
 
 // stubs
 const MetricStub = {

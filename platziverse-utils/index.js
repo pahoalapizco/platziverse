@@ -9,6 +9,8 @@ const {
   NotAuthorizedError,
   NotAuthenticatedError
 } = require('./lib/customErrors')
+const agentFixture = require('./lib/fixtures/agent')
+const metricFixture = require('./lib/fixtures/metric')
 
 module.exports = {
   config,
@@ -18,5 +20,7 @@ module.exports = {
   AgentNotFoundError,
   MetricsNotFoundError,
   NotAuthorizedError,
-  NotAuthenticatedError
+  NotAuthenticatedError,
+  agentFixture,
+  metricFixture
 }
