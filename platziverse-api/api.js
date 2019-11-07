@@ -2,10 +2,12 @@
 
 const debug = require('debug')('platziverse:api:routes')
 const express = require('express')
+const auth = require('express-jwt') //middleware para autenticar rutas
 const asyncify = require('express-asyncify')
 const {
   AgentNotFoundError,
   MetricsNotFoundError,
+  NotAuthorizedError,
   config
 } = require('platziverse-utils')
 const db = require('platziverse-db')
@@ -15,7 +17,7 @@ const api = asyncify(express.Router())
 let services, Agent, Metric
 
 const loggin = s => debug(s)
-
+const authsecret = config().auth
 // *: Cada que se solicite una petición se ejecuta el middleware
 api.use('*', async (req, res, next) => {
   if (!services) {
@@ -31,18 +33,28 @@ api.use('*', async (req, res, next) => {
   next()
 })
 
-api.get('/agents', async (req, res, next) => {
+api.get('/agents', auth(authsecret), async (req, res, next) => {
   debug('A request has come to /agents')
+  
+  const { user } = req
+
+  if (!user || !user.username) {
+    return next(new NotAuthorizedError())
+  }
 
   let agents = []
   try {
-    agents = await Agent.findConnected()
+    if (user.admin) {
+      agents = await Agent.findConnected()
+    } else {
+      agents = await Agent.findUser(user.username)
+    }
   } catch (e) {
     next(e)
   }
   res.status(200).send(agents)
 })
-api.get('/agents/:uuid', async (req, res, next) => {
+api.get('/agents/:uuid', auth(authsecret), async (req, res, next) => {
   const { uuid } = req.params
   let agent
 
@@ -60,7 +72,7 @@ api.get('/agents/:uuid', async (req, res, next) => {
 
   res.send(agent)
 })
-api.get('/metrics/:uuid', async (req, res, next) => {
+api.get('/metrics/:uuid', auth(authsecret), async (req, res, next) => {
   const { uuid } = req.params
   let metrics = []
   debug(`Petición a /metrics/${uuid}`)
@@ -77,7 +89,7 @@ api.get('/metrics/:uuid', async (req, res, next) => {
 
   res.send(metrics)
 })
-api.get('/metrics/:uuid/:type', async (req, res, next) => {
+api.get('/metrics/:uuid/:type', auth(authsecret), async (req, res, next) => {
   const { uuid, type } = req.params
   let metrics = []
   debug(`Petición a /metrics/${uuid}/${type}`)
