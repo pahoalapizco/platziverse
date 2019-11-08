@@ -3,6 +3,7 @@
 const debug = require('debug')('platziverse:api:routes')
 const express = require('express')
 const auth = require('express-jwt') //middleware para autenticar rutas
+const guard = require('express-jwt-permissions')() //middelware para autorizar rutas, para utilizar este mw nececitamos del mw anterior
 const asyncify = require('express-asyncify')
 const {
   AgentNotFoundError,
@@ -72,7 +73,7 @@ api.get('/agents/:uuid', auth(authsecret), async (req, res, next) => {
 
   res.send(agent)
 })
-api.get('/metrics/:uuid', auth(authsecret), async (req, res, next) => {
+api.get('/metrics/:uuid', auth(authsecret), guard.check(['metrics:read']), async (req, res, next) => {
   const { uuid } = req.params
   let metrics = []
   debug(`Petición a /metrics/${uuid}`)
@@ -89,7 +90,7 @@ api.get('/metrics/:uuid', auth(authsecret), async (req, res, next) => {
 
   res.send(metrics)
 })
-api.get('/metrics/:uuid/:type', auth(authsecret), async (req, res, next) => {
+api.get('/metrics/:uuid/:type', auth(authsecret), guard.check(['metrics:read']), async (req, res, next) => {
   const { uuid, type } = req.params
   let metrics = []
   debug(`Petición a /metrics/${uuid}/${type}`)
