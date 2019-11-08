@@ -5,9 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Platziverse-web</title>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <header>Platziverse</header>
     <h1> This is our platziverse dashboard</h1>
+
+    <script type="text/javascript">
+        var socket = io()
+
+        socket.on('agent/message', function (payload) {
+            console.log(payload)
+        })
+
+        setTimeout(function () {
+            socket.emit('agent/message', 'hello server XD')
+        }, 5000)
+    </script>
 </body>
 </html>
