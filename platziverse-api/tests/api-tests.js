@@ -2,28 +2,33 @@
 
 const test = require('ava')
 const request = require('supertest')
-// const server = require('../server')
+const auth = require('../auth')
+const util = require('util')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 const {
   agentFixture,
-  metricFixture
+  metricFixture,
+  config
 } = require('platziverse-utils')
 
 let sandbox = null
 let server = null
 let dbStub = null
+let token = null
 const AgentStub = {}
 const MetricStub = {}
-
+const sign = util.promisify(auth.sign)
 // variables para pruebas
 const uuid = 'yyy-yyy-yyy-yyy'
 const wUUID = 'yyyy'
 const type = 'Memory'
 
-test.beforeEach(() => {
+test.beforeEach(async () => {
   sandbox = sinon.createSandbox()
   dbStub = sandbox.stub()
+  // genera el token 
+  token =  await sign({ admin: true, username: 'admin'}, config().auth.secret)
   // el dbStub va a regresar una promesa que al resolverse entregará
   // los stubs de Agent y Metric
   AgentStub.findConnected = sandbox.stub()
@@ -69,6 +74,7 @@ test.afterEach(() => {
 test.serial.cb('/api/agents', t => {
   request(server)
     .get('/api/agents')
+    .set('Authorization', `Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .end((err, res) => {
@@ -84,6 +90,7 @@ test.serial.cb('/api/agents', t => {
 test.serial.cb('/api/agents/:uuid', t => {
   request(server)
     .get('/api/agents/yyy-yyy-yyy-yyy')
+    .set('Authorization', `Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .end((err, res) => {
@@ -98,6 +105,7 @@ test.serial.cb('/api/agents/:uuid', t => {
 test.serial.cb('/api/agents/:uuid - not fount', t => {
   request(server)
     .get(`/api/agents/${wUUID}`)
+    .set('Authorization', `Bearer ${token}`)
     .expect(404)
     .expect('Content-Type', /json/)
     .end((err, res) => {
@@ -110,6 +118,7 @@ test.serial.cb('/api/agents/:uuid - not fount', t => {
 test.serial.cb('/api/metrics/:uuid', t => {
   request(server)
     .get(`/api/metrics/${uuid}`)
+    .set('Authorization', `Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .end((err, res) => {
@@ -124,6 +133,7 @@ test.serial.cb('/api/metrics/:uuid', t => {
 test.serial.cb('/api/metrics/:uuid - not fount', t => {
   request(server)
     .get(`/api/metrics/${wUUID}`)
+    .set('Authorization', `Bearer ${token}`)
     .expect(404)
     .expect('Content-Type', /json/)
     .end((err, res) => {
@@ -134,22 +144,24 @@ test.serial.cb('/api/metrics/:uuid - not fount', t => {
 })
 
 test.serial.cb('/api/metrics/:uuid/:type', t => {
-    request(server)
-      .get(`/api/metrics/${uuid}/${type}`)
-      .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        t.falsy(err, 'No debería regresar un error')
-        const body = JSON.stringify(res.body)
-        const expected = JSON.stringify(metricFixture.byTypeAgentUuid(type, uuid))
-        t.deepEqual(body, expected, 'La respuesta debería ser igual al valor esperado')
-        t.end()
-      })
+  request(server)
+    .get(`/api/metrics/${uuid}/${type}`)
+    .set('Authorization', `Bearer ${token}`)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end((err, res) => {
+      t.falsy(err, 'No debería regresar un error')
+      const body = JSON.stringify(res.body)
+      const expected = JSON.stringify(metricFixture.byTypeAgentUuid(type, uuid))
+      t.deepEqual(body, expected, 'La respuesta debería ser igual al valor esperado')
+      t.end()
+    })
 })
 
 test.serial.cb('/api/metrics/:uuid/:type - not fount', t => {
   request(server)
-  .get(`/api/metrics/${wUUID}/${type}`)
+    .get(`/api/metrics/${wUUID}/${type}`)
+    .set('Authorization', `Bearer ${token}`)
     .expect(404)
     .expect('Content-Type', /json/)
     .end((err, res) => {
