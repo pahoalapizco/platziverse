@@ -27,6 +27,7 @@
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "platziverse-utils": "file:../platziverse-utils",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "platziverse-agent": "file:../platziverse-agent"
   }
 }
