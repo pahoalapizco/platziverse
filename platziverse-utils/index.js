@@ -2,7 +2,7 @@
 
 const { config } = require('./lib/db')
 const { handleFatalError, handleError } = require('./lib/request')
-const { parsePayload } = require('./lib/utils')
+const { parsePayload, pipe } = require('./lib/utils')
 const {
   AgentNotFoundError,
   MetricsNotFoundError,
@@ -22,5 +22,6 @@ module.exports = {
   NotAuthorizedError,
   NotAuthenticatedError,
   agentFixture,
-  metricFixture
+  metricFixture,
+  pipe
 }

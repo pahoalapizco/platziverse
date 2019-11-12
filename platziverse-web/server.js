@@ -7,8 +7,9 @@ const express = require('express')
 const path = require('path')
 const socketio = require('socket.io')
 const {
-    handleFatalError, 
-    handleError
+  handleFatalError,
+  handleError,
+  pipe
 } = require('platziverse-utils')
 const PlatziverseAgent = require('platziverse-agent')
 
@@ -22,20 +23,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // WebSocket
 io.on('connect', socket => {
-    debug(`Connected ${socket.id}`)
+  debug(`Connected ${socket.id}`)
 
-   agent.on('agent/message', payload => {
-        socket.emit('agent/message', payload)
-   })
-
-   agent.on('agent/connected', payload => {
-        socket.emit('agent/connected', payload)
-   })
-
-   agent.on('agent/disconnected', payload => {
-        socket.emit('agent/disconnected', payload)
-   })
-
+  pipe(agent, socket)
 })
 
 server.listen(port, () => {
