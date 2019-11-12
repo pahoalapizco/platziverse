@@ -26,8 +26,11 @@
     "chalk": "^2.4.2",
     "debug": "^4.1.1",
     "express": "^4.17.1",
+    "express-asyncify": "^1.0.0",
+    "platziverse-agent": "file:../platziverse-agent",
     "platziverse-utils": "file:../platziverse-utils",
-    "socket.io": "^2.3.0",
-    "platziverse-agent": "file:../platziverse-agent"
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.8",
+    "socket.io": "^2.3.0"
   }
 }
