@@ -44,9 +44,9 @@ class PlatziverseAgent extends EventEmitter {
       this._started = true
       this._client = mqtt.connect(opts.mqtt.host)
       
-      this._client.subscribe('agnet/message')
-      this._client.subscribe('agnet/connected')
-      this._client.subscribe('agnet/disconnected')
+      this._client.subscribe('agent/message')
+      this._client.subscribe('agent/connected')
+      this._client.subscribe('agent/disconnected')
       
       this._client.on('connect', () => {
         this._agentId = uuid.v4()
@@ -83,8 +83,8 @@ class PlatziverseAgent extends EventEmitter {
         }, opts.interval)
       })
         
-        this._client.on('message', (topic, payload) => {
-        paylod = parsePayload(payload)
+      this._client.on('message', (topic, payload) => {
+        payload = parsePayload(payload)
         
         // Re transmitir mensajes en nuestro agente!!
         let broadcast = false
@@ -108,7 +108,8 @@ class PlatziverseAgent extends EventEmitter {
     if (this._started) {
       clearInterval(this._timer)
       this._started = false
-      this.emit('disconected')
+      this.emit('disconnected', this._agentId)
+      this._client.end()
     }
   }
 }
