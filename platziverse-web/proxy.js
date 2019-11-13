@@ -28,9 +28,10 @@ api.get('/agents', async (req, res, next) => {
 })
 
 api.get('/agents/:uuid', async (req, res, next) => {
+  const { uuid } = req.params
   const optios = {
     method: 'GET',
-    url: `${endpoint}/api/agents/${req.uuid}`,
+    url: `${endpoint}/api/agents/${uuid}`,
     headers: {
       Authorization: `Bearer ${apiToken}`
     },
@@ -48,9 +49,10 @@ api.get('/agents/:uuid', async (req, res, next) => {
 })
 
 api.get('/metrics/:uuid', async (req, res, next) => {
+  const { uuid } = req.params
   const optios = {
     method: 'GET',
-    url: `${endpoint}/api/metrics/${req.uuid}`,
+    url: `${endpoint}/api/metrics/${uuid}`,
     headers: {
       Authorization: `Bearer ${apiToken}`
     },
@@ -68,9 +70,11 @@ api.get('/metrics/:uuid', async (req, res, next) => {
 })
 
 api.get('/metrics/:uuid/:type', async (req, res, next) => {
+  const { uuid, type } = req.params
+  
   const optios = {
     method: 'GET',
-    url: `${endpoint}/api/metrics/${req.uuid}/${req.type}`,
+    url: `${endpoint}/api/metrics/${uuid}/${type}`,
     headers: {
       Authorization: `Bearer ${apiToken}`
     },
