@@ -133,6 +133,7 @@ const notifyAgent = (agent) => {
     payload: JSON.stringify({
       agent: {
         uuid: agent.uuid,
+        name: agent.name,
         username: agent.username,
         hostname: agent.hostname,
         pid: agent.pid,
