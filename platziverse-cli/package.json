@@ -1,0 +1,24 @@
+{
+  "name": "platziverse-cli",
+  "version": "1.0.0",
+  "description": "A simple IoT platform - cli",
+  "main": "platziverse.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pahoalapizco/platziverse.git"
+  },
+  "author": "pahoalapizco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pahoalapizco/platziverse/issues"
+  },
+  "homepage": "https://github.com/pahoalapizco/platziverse#readme",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.8.18",
+    "standard": "^14.3.1"
+  }
+}
