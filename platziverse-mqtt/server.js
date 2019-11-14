@@ -54,7 +54,7 @@ server.on('clientDisconnected', async (client) => {
       topic: 'agent/disconnected',
       payload: JSON.stringify({
         agent: {
-          uuid: agent.uu
+          uuid: agent.uuid
         }
       })
     })

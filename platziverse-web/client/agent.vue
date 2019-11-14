@@ -4,7 +4,7 @@
       <h2 class="agent-title">{{name}} ({{pid}})</h2>
       <p class="agent-host">{{hostname}}</p>
       <p class="agent-status">Connected: <span>{{connected}}</span></p>
-      <button v-on:click="toggleMetrics" class="button">Toggle Metrics</button>
+      <button v-on:click="toggleMetrics" class="button">{{openToggle}} Metrics</button>
       <div v-show="showMetrics">
         <h3 class="metrics-title">Metrics</h3>
         <metric
@@ -86,6 +86,7 @@ module.exports = {
       connected: false,
       pid: null,
       showMetrics: false,
+      openToggle: 'OPEN',
       error: null,
       metrics: []
     }
@@ -137,10 +138,27 @@ module.exports = {
       }
 
       this.metrics = metrics
+      this.startRealtime()
+    },
+
+    startRealtime () {
+      const { uuid, socket } = this
+
+      socket.on('agent/disconnected', payload => {
+        console.log('entro al socket disconected')
+        console.log('uuid: ', uuid)
+        console.log('payload.agent: ', payload)
+
+        if (payload.agent.uuid === uuid) {
+          console.log('Se va a desconectar')
+          this.connected = false
+        }
+      })    
     },
 
     toggleMetrics() {
       this.showMetrics = this.showMetrics ? false : true
+      this.openToggle = this.showMetrics ? 'CLOSE' : 'OPEN'
     }
   }
 }

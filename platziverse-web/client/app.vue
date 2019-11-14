@@ -6,7 +6,7 @@
       :socket="socket">
     </metric> -->
     <agent
-      uuid="06758aa1-7a22-4c71-9079-ffd7e8c4c134"
+      uuid="505ec805-477e-46c6-a528-b6176e014d5b"
       :socket="socket"
     ></agent>
     <agent
