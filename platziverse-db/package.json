@@ -7,7 +7,7 @@
     "test": "DEBUG=platziverse:* ava test/*-test.* --verbose",
     "test:coverage": "DEBUG=platziverse:* nyc --reporter=lcov ava test/*-test.* --verbose",
     "lint": "standard",
-    "setup": "DEBUG=platziverse:* node setup.js -y"
+    "setup": "DEBUG=platziverse:* node setup.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/pahoalapizco/platziverse#readme",
   "devDependencies": {
     "ava": "^2.2.0",
+    "longjohn": "^0.2.12",
     "nyc": "^14.1.1",
     "proxyquire": "^2.1.1",
     "sinon": "^7.3.2",
