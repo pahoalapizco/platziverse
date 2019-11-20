@@ -75,6 +75,7 @@
 
 <script>
 const request = require('request-promise-native')
+const { serverHost } = require('../config')
 
 module.exports = {
   props: [ 'uuid', 'socket' ],
@@ -101,7 +102,7 @@ module.exports = {
       const { uuid } = this
       const options = {
         method: 'GET',
-        url: `http://localhost:8080/agents/${uuid}`,
+        url: `${serverHost}/agents/${uuid}`,
         json: true
       }
       
@@ -125,7 +126,7 @@ module.exports = {
       const { uuid } = this
       const options = {
         method: 'GET',
-        url: `http://localhost:8080/metrics/${uuid}`,
+        url: `${serverHost}/metrics/${uuid}`,
         json: true
       }
 
@@ -145,12 +146,7 @@ module.exports = {
       const { uuid, socket } = this
 
       socket.on('agent/disconnected', payload => {
-        console.log('entro al socket disconected')
-        console.log('uuid: ', uuid)
-        console.log('payload.agent: ', payload)
-
         if (payload.agent.uuid === uuid) {
-          console.log('Se va a desconectar')
           this.connected = false
         }
       })    

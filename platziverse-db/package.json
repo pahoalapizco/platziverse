@@ -7,7 +7,7 @@
     "test": "DEBUG=platziverse:* ava test/*-test.* --verbose",
     "test:coverage": "DEBUG=platziverse:* nyc --reporter=lcov ava test/*-test.* --verbose",
     "lint": "standard",
-    "setup": "DEBUG=platziverse:* node setup.js"
+    "setup": "DEBUG=platziverse:* node setup.js -y"
   },
   "repository": {
     "type": "git",

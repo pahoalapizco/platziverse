@@ -22,6 +22,7 @@
 const request = require('request-promise-native')
 const io = require('socket.io-client')
 const socket = io()
+const { serverHost } = require('../config')
 
 module.exports = {
   data () {
@@ -40,7 +41,7 @@ module.exports = {
     async initialize () {
       const options = {
         method: 'GET',
-        url: `http://localhost:8080/agents`,
+        url: `${serverHost}/agents`,
         json: true
       }
 
