@@ -41,7 +41,7 @@
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "express-asyncify": "^1.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "platziverse-agent": "file:../platziverse-agent",
     "platziverse-utils": "file:../platziverse-utils",
     "random-material-color": "^1.0.5",
